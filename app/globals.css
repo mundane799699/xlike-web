@@ -19,4 +19,7 @@ progress::-webkit-progress-value {
   .btn {
     @apply !capitalize;
   }
+  .btn-primary {
+    @apply !bg-blue-500 hover:!bg-blue-600 border-none;
+  }
 }

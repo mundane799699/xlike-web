@@ -57,51 +57,69 @@ const PrivacyPolicy = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: 2023-08-25
+          {`Last Updated: September 24, 2024
 
-Thank you for visiting ShipFast ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our website located at https://shipfa.st (the "Website").
+Thank you for using Xlike ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our browser extension Xlike (the "Extension").
 
-By accessing or using the Website, you agree to the terms of this Privacy Policy. If you do not agree with the practices described in this policy, please do not use the Website.
+By installing or using the Extension, you agree to the terms of this Privacy Policy. If you do not agree with the practices described in this policy, please do not use the Extension.
 
 1. Information We Collect
 
 1.1 Personal Data
 
-We collect the following personal information from you:
+We collect and store the following personal information:
 
-Name: We collect your name to personalize your experience and communicate with you effectively.
-Email: We collect your email address to send you important information regarding your orders, updates, and communication.
-Payment Information: We collect payment details to process your orders securely. However, we do not store your payment information on our servers. Payments are processed by trusted third-party payment processors.
+- User account information: We collect your email address when you create an account to enable multi-device synchronization.
+- Twitter likes data: We store your Twitter likes data on our secure servers to provide seamless access across multiple devices.
 
 1.2 Non-Personal Data
 
-We may use web cookies and similar technologies to collect non-personal information such as your IP address, browser type, device information, and browsing patterns. This information helps us to enhance your browsing experience, analyze trends, and improve our services.
+We may use cookies or similar technologies to collect non-personal information such as your browser type, device information, and Extension usage patterns. This information helps us to enhance your experience, analyze trends, and improve our services.
 
-2. Purpose of Data Collection
+2. Data Storage and Usage
 
-We collect and use your personal data for the sole purpose of order processing. This includes processing your orders, sending order confirmations, providing customer support, and keeping you updated about the status of your orders.
+2.1 Twitter Like Data
+
+The Extension initially stores your Twitter likes data locally in your browser's IndexedDB. To enable multi-device access, this data is also securely transmitted to and stored on our servers.
+
+2.2 Purpose of Data Storage
+
+We store your Twitter likes data for the following purposes:
+- To allow you to search and manage your likes within the Extension
+- To provide synchronization of your likes across multiple devices
+- To backup your data to prevent loss
 
 3. Data Sharing
 
-We do not share your personal data with any third parties except as required for order processing (e.g., sharing your information with payment processors). We do not sell, trade, or rent your personal information to others.
+We do not share your personal data or Twitter likes data with third parties, except as required to provide our services (e.g., cloud storage providers). We do not sell, trade, or rent your personal information to others.
 
-4. Children's Privacy
+4. Data Security
 
-ShipFast is not intended for children under the age of 13. We do not knowingly collect personal information from children. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us at the email address provided below.
+We implement industry-standard security measures to protect your data both during transmission and once we receive it. However, no method of transmission over the internet or electronic storage is 100% secure.
 
-5. Updates to the Privacy Policy
+5. Twitter's Terms of Service
 
-We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Any updates will be posted on this page, and we may notify you via email about significant changes.
+Your use of Xlike must comply with Twitter's Terms of Service. Xlike is not affiliated with, endorsed, or sponsored by Twitter.
 
-6. Contact Information
+6. Children's Privacy
+
+Xlike is not intended for children under the age of 13. We do not knowingly collect or store information from children.
+
+7. Updates to the Privacy Policy
+
+We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. Any updates will be posted within the Extension, and we may notify you about significant changes.
+
+8. Your Rights
+
+You have the right to access, correct, or delete your personal information and Twitter likes data stored on our servers. You can exercise these rights by contacting us at the email address provided below.
+
+9. Contact Information
 
 If you have any questions, concerns, or requests related to this Privacy Policy, you can contact us at:
 
-Email: marc@shipfa.st
+Email: zfyoung799699@gmail.com
 
-For all other inquiries, please visit our Contact Us page on the Website.
-
-By using ShipFast, you consent to the terms of this Privacy Policy.`}
+By using Xlike, you consent to the terms of this Privacy Policy.`}
         </pre>
       </div>
     </main>

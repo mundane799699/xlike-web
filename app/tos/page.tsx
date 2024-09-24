@@ -57,39 +57,47 @@ const TOS = () => {
           className="leading-relaxed whitespace-pre-wrap"
           style={{ fontFamily: "sans-serif" }}
         >
-          {`Last Updated: September 26, 2023
+          {`Last Updated: September 24, 2024
 
-Welcome to ShipFast!
+Welcome to Xlike!
 
-These Terms of Service ("Terms") govern your use of the ShipFast website at https://shipfa.st ("Website") and the services provided by ShipFast. By using our Website and services, you agree to these Terms.
+These Terms of Service ("Terms") govern your use of the Xlike browser extension ("Extension") and any associated services provided by Xlike. By using our Extension and services, you agree to these Terms.
 
-1. Description of ShipFast
+1. Description of Xlike
 
-ShipFast is a platform that offers a JavaScript code boilerplate to assist entrepreneurs in launching their startups more efficiently.
+Xlike is a browser extension that allows users to save and search their Twitter likes, storing the data in IndexedDB for easy access and management.
 
 2. Ownership and Usage Rights
 
-When you purchase a package from ShipFast, you gain the right to download and use the code provided for creating applications. You own the code you create but do not have the right to resell it. We offer a full refund within 7 days of purchase, as specified in our refund policy.
+When you install the Xlike extension, you gain the right to use it for personal, non-commercial purposes. You own the data you save using Xlike but do not have the right to redistribute or resell the extension or its code.
 
 3. User Data and Privacy
 
-We collect and store user data, including name, email, and payment information, as necessary to provide our services. For details on how we handle your data, please refer to our Privacy Policy at https://shipfa.st/privacy-policy.
+We store your liked tweets data locally in your browser's IndexedDB. We do not collect or store this data on our servers. For more information on how we handle your data, please refer to our Privacy Policy [link to privacy policy].
 
 4. Non-Personal Data Collection
 
-We use web cookies to collect non-personal data for the purpose of improving our services and user experience.
+We may use cookies or similar technologies to collect non-personal data for the purpose of improving our services and user experience.
 
-5. Governing Law
+5. Twitter Terms of Service
 
-These Terms are governed by the laws of France.
+Your use of Xlike must also comply with Twitter's Terms of Service. Xlike is not affiliated with, endorsed, or sponsored by Twitter.
 
-6. Updates to the Terms
+6. Limitation of Liability
 
-We may update these Terms from time to time. Users will be notified of any changes via email.
+Xlike is provided "as is" without any warranties. We are not responsible for any loss of data or other damages that may occur from the use of our extension.
 
-For any questions or concerns regarding these Terms of Service, please contact us at marc@shipfa.st.
+7. Governing Law
 
-Thank you for using ShipFast!`}
+These Terms are governed by the laws of US.
+
+8. Updates to the Terms
+
+We may update these Terms from time to time. Users will be notified of any significant changes via the extension or our website.
+
+For any questions or concerns regarding these Terms of Service, please contact us at zfyoung799699@gmail.com.
+
+Thank you for using Xlike!`}
         </pre>
       </div>
     </main>

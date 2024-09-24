@@ -13,22 +13,28 @@ interface FAQItemProps {
 
 const faqList: FAQItemProps[] = [
   {
-    question: "What do I get exactly?",
-    answer: <div className="space-y-2 leading-relaxed">Loreum Ipseum</div>,
+    question: "Is it free?",
+    answer: (
+      <div className="space-y-2 leading-relaxed">
+        All The basic functions are free, including sync and search.
+      </div>
+    ),
   },
   {
-    question: "Can I get a refund?",
+    question: "Where is my like data stored?",
     answer: (
       <p>
-        Yes! You can request a refund within 7 days of your purchase. Reach out
-        by email.
+        It's stored in your browser, a database called indexdb. We will not
+        disclose your personal data.
       </p>
     ),
   },
   {
     question: "I have another question",
     answer: (
-      <div className="space-y-2 leading-relaxed">Cool, contact us by email</div>
+      <div className="space-y-2 leading-relaxed">
+        Cool, contact us by email. My email is zfyoung799699@gmail.com
+      </div>
     ),
   },
 ];
