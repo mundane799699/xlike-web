@@ -30,6 +30,17 @@ const faqList: FAQItemProps[] = [
     ),
   },
   {
+    question: "What features are planned for future development?",
+    answer: (
+      <p>
+        We plan to develop functionality to synchronize your local Twitter likes
+        to a server, enabling access across multiple devices. Additionally, we
+        aim to provide more accurate search capabilities and implement
+        categorization features for your likes.
+      </p>
+    ),
+  },
+  {
     question: "I have another question",
     answer: (
       <div className="space-y-2 leading-relaxed">

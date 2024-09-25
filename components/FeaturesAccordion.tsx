@@ -221,11 +221,16 @@ const FeaturesAccordion = () => {
         <p className="text-lg opacity-80 leading-relaxed mb-24">
           Transform your Twitter likes into a searchable archive.
         </p>
-        <div className="lg:w-full">
+        <div className="lg:w-full flex flex-col items-center">
+          <video
+            src="https://cdn.dreamfree.xyz/xlike-demo.mp4"
+            controls
+            className="w-[1920px] object-cover object-top rounded mb-12"
+          ></video>
           <Image
             src="/screenshot.png"
             alt="Product Demo"
-            className="w-full"
+            className="w-full rounded"
             priority={true}
             width={2633}
             height={1372}
