@@ -20,7 +20,13 @@ const CTA = () => {
             Don&apos;t waste time looking for your likes.
           </p>
 
-          <button className="btn btn-primary btn-wide">Install Now</button>
+          <a
+            className="btn btn-primary btn-wide"
+            href="https://chromewebstore.google.com/detail/xlike-likes-for-xtwitter/jcjgngmhfjlidiehbaeibmpjljjgdjbm"
+            target="_blank"
+          >
+            Install Now
+          </a>
         </div>
       </div>
     </section>
