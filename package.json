@@ -33,7 +33,8 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-tooltip": "^5.26.3",
     "stripe": "^13.11.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

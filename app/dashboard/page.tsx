@@ -7,10 +7,14 @@ export const dynamic = "force-dynamic";
 // See https://shipfa.st/docs/tutorials/private-page
 export default async function Dashboard() {
   return (
-    <main className="min-h-screen p-8 pb-24">
-      <section className="max-w-xl mx-auto space-y-8">
+    <main className="min-h-screen pt-16">
+      <header className="fixed top-0 left-0 right-0 bg-white z-10 p-4 flex justify-end shadow-md">
         <ButtonAccount />
-        <h1 className="text-3xl md:text-4xl font-extrabold">Private Page</h1>
+      </header>
+      <section className="max-w-full mx-auto space-y-8 p-8 ">
+        <h1 className="text-3xl md:text-4xl font-extrabold h-[1080px] bg-pink-300">
+          Private Page
+        </h1>
       </section>
     </main>
   );

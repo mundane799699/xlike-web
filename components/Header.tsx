@@ -23,7 +23,7 @@ const links: {
   },
 ];
 
-const cta: JSX.Element = <ButtonSignin extraStyle="btn-primary" />;
+const cta: JSX.Element = <ButtonSignin text="Sign in" />;
 
 // A header with a logo on the left, links in the center (like Pricing, etc...), and a CTA (like Get Started or Login) on the right.
 // The header is responsive, and on mobile, the links are hidden behind a burger button.
@@ -103,7 +103,7 @@ const Header = () => {
         </div>
 
         {/* CTA on large screens */}
-        {/* <div className="hidden lg:flex lg:justify-end lg:flex-1">{cta}</div> */}
+        <div className="hidden lg:flex lg:justify-end lg:flex-1">{cta}</div>
       </nav>
 
       {/* Mobile menu, show/hide based on menu state. */}

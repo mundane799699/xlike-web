@@ -16,10 +16,11 @@ progress::-webkit-progress-value {
   .btn-gradient {
     @apply !bg-gradient !bg-[length:300%_300%] hover:saturate-[1.2] shadow duration-100 !border-0 !border-transparent !bg-transparent animate-shimmer disabled:!bg-none disabled:!bg-gray-500/30  !text-white;
   }
-  .btn {
-    @apply !capitalize;
-  }
   .btn-primary {
     @apply !bg-blue-500 hover:!bg-blue-600 border-none;
   }
 }
+
+/* [data-theme="light"] {
+  --p: 56% 0.67 253.77;
+} */
