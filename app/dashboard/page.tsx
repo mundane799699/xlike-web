@@ -2,6 +2,7 @@
 
 import ButtonAccount from "@/components/ButtonAccount";
 import apiClient from "@/libs/api";
+import { Loader2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -127,8 +128,65 @@ export default function Dashboard() {
                   )}
                 </div>
               )}
+              {/* 引用的推文 */}
+              {tweet.quoted_tweet && (
+                <div className="mt-3 border rounded-lg p-3 bg-gray-50">
+                  <div className="flex items-center mb-2">
+                    <img
+                      src={tweet.quoted_tweet.avatar_url}
+                      alt={tweet.quoted_tweet.username}
+                      className="w-8 h-8 rounded-full mr-2"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-sm">
+                        {tweet.quoted_tweet.username}
+                      </h4>
+                      <p className="text-xs text-gray-500">
+                        @{tweet.quoted_tweet.screen_name}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-sm mb-2">{tweet.quoted_tweet.full_text}</p>
+                  {tweet.quoted_tweet.media_items &&
+                    tweet.quoted_tweet.media_items.length > 0 && (
+                      <div className="relative w-full flex justify-center">
+                        <img
+                          src={
+                            tweet.quoted_tweet.media_items[0].media_url_https
+                          }
+                          alt="Quoted tweet image"
+                          className="rounded-lg max-h-[520px]"
+                        />
+                        {tweet.quoted_tweet.media_items[0].type !== "photo" && (
+                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-50">
+                            <svg viewBox="0 0 60 61" aria-hidden="true">
+                              <g>
+                                <circle
+                                  cx="30"
+                                  cy="30.4219"
+                                  fill="#333333"
+                                  opacity="0.6"
+                                  r="30"
+                                ></circle>
+                                <path
+                                  d="M22.2275 17.1971V43.6465L43.0304 30.4218L22.2275 17.1971Z"
+                                  fill="white"
+                                ></path>
+                              </g>
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                </div>
+              )}
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-center items-center">
+              <Loader2 className="animate-spin text-blue-500" />
+            </div>
+          )}
         </section>
       </main>
     </div>
