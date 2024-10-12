@@ -16,11 +16,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     const handleScroll = () => {
+      // 这里其实还是有问题的，获取到的isLoading不是最新的，导致fetchData可能触发多次
       if (isLoading) {
         return;
       }
-      const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
       if (scrollTop + clientHeight >= scrollHeight - 100) {
