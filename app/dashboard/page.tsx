@@ -3,6 +3,7 @@
 import ButtonAccount from "@/components/ButtonAccount";
 import apiClient from "@/libs/api";
 import { useCallback, useEffect, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,25 @@ export default function Dashboard() {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      // 这里其实还是有问题的，获取到的isLoading不是最新的，导致fetchData可能触发多次
+  const fetchData = useCallback(() => {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+    apiClient
+      .get("/tweet", { params: { page } })
+      .then((res) => {
+        setTweets((prev) => [...prev, ...res.data]);
+        setPage((prev) => prev + 1);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, [isLoading, page]);
+
+  const handleScroll = useCallback(
+    useDebouncedCallback(() => {
       if (isLoading) {
         return;
       }
@@ -26,33 +43,18 @@ export default function Dashboard() {
       if (scrollTop + clientHeight >= scrollHeight - 100) {
         fetchData();
       }
-    };
+    }, 300),
+    [fetchData]
+  );
+
+  useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLoading]);
+  }, [handleScroll]);
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  const fetchData = useCallback(() => {
-    setIsLoading((prevIsLoading) => {
-      if (prevIsLoading) {
-        return prevIsLoading;
-      }
-      apiClient
-        .get("/tweet", { params: { page } })
-        .then((res) => {
-          setTweets((prev) => [...prev, ...res.data]);
-          setPage((prev) => prev + 1);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
-      return true;
-    });
-  }, [page]);
 
   return (
     <div className="h-screen pt-16">
