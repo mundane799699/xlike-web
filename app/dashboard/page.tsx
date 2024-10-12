@@ -2,7 +2,7 @@
 
 import ButtonAccount from "@/components/ButtonAccount";
 import apiClient from "@/libs/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -11,12 +11,48 @@ export const dynamic = "force-dynamic";
 // See https://shipfa.st/docs/tutorials/private-page
 export default function Dashboard() {
   const [tweets, setTweets] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    apiClient.get("/tweet").then((res) => {
-      setTweets((prev) => [...prev, ...res.data]);
-    });
+    const handleScroll = () => {
+      if (isLoading) {
+        return;
+      }
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = document.documentElement.clientHeight;
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
+        fetchData();
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isLoading]);
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const fetchData = useCallback(() => {
+    setIsLoading((prevIsLoading) => {
+      if (prevIsLoading) {
+        return prevIsLoading;
+      }
+      apiClient
+        .get("/tweet", { params: { page } })
+        .then((res) => {
+          setTweets((prev) => [...prev, ...res.data]);
+          setPage((prev) => prev + 1);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setIsLoading(false);
+        });
+      return true;
+    });
+  }, [page]);
 
   return (
     <div className="h-screen pt-16">
@@ -69,7 +105,7 @@ export default function Dashboard() {
                     className="max-h-[520px]"
                   />
                   {tweet.media_items[0].type !== "photo" && (
-                    <div className="pointer-events-none absolute left-1/2 top-1/2 -ml-8 -mt-8 flex h-14 w-14 items-center justify-center rounded-full">
+                    <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full">
                       <svg viewBox="0 0 60 61" aria-hidden="true">
                         <g>
                           <circle
