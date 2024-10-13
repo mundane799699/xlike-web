@@ -19,6 +19,10 @@ progress::-webkit-progress-value {
   .btn-primary {
     @apply !bg-blue-500 hover:!bg-blue-600 border-none;
   }
+
+  .btn {
+    @apply focus-visible:outline-none;
+  }
 }
 
 /* [data-theme="light"] {

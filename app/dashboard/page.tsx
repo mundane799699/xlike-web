@@ -4,7 +4,7 @@ import ButtonAccount from "@/components/ButtonAccount";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/libs/api";
 import { ExternalLink, Loader2, Trash2 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { createClient } from "@/libs/supabase/client";
 
@@ -19,6 +19,8 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const { user, setUser } = useAuth();
   const supabase = createClient();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const deletingIdRef = useRef<string | null>(null);
 
   const initFetch = async () => {
     const userId = await fetchUser();
@@ -41,9 +43,12 @@ export default function Dashboard() {
       }
       setIsLoading(true);
       apiClient
-        .get("/tweet", { params: { page, userId: userId || user?.id } })
+        .get("/tweet/list", { params: { page, userId: userId || user?.id } })
         .then((res) => {
-          setTweets((prev) => [...prev, ...res.data]);
+          const updatedData: any[] = res.data.map((item: any) => {
+            return { ...item, deleteLoading: false };
+          });
+          setTweets((prev) => [...prev, ...updatedData]);
           setPage((prev) => prev + 1);
           setIsLoading(false);
         })
@@ -77,6 +82,42 @@ export default function Dashboard() {
   useEffect(() => {
     initFetch();
   }, []);
+
+  const deleteTweet = async (id: string) => {
+    modalRef.current?.close();
+    setTweets((prev) =>
+      prev.map((tweet) =>
+        tweet.id === id ? { ...tweet, deleteLoading: true } : tweet
+      )
+    );
+    apiClient
+      .post("/tweet/delete", {
+        userId: user?.id,
+        id,
+      })
+      .then((res: any) => {
+        if (res.code === 200) {
+          setTweets((prev) => prev.filter((tweet) => tweet.id !== id));
+        }
+      })
+      .finally(() => {
+        setTweets((prev) =>
+          prev.map((tweet) =>
+            tweet.id === id ? { ...tweet, deleteLoading: false } : tweet
+          )
+        );
+      });
+  };
+
+  const openModal = (id: string) => {
+    deletingIdRef.current = id;
+    modalRef.current?.showModal();
+  };
+
+  const closeModal = () => {
+    deletingIdRef.current = null;
+    modalRef.current?.close();
+  };
 
   return (
     <div className="h-screen pt-16">
@@ -230,8 +271,15 @@ export default function Dashboard() {
                   >
                     <ExternalLink className="h-6 w-6 text-gray-400 hover:text-blue-500" />
                   </a>
-                  <div className="hover:cursor-pointer">
-                    <Trash2 className="h-6 w-6 text-gray-400 hover:text-red-500" />
+                  <div>
+                    {tweet.deleteLoading ? (
+                      <Loader2 className="animate-spin text-blue-500" />
+                    ) : (
+                      <Trash2
+                        className="hover:cursor-pointer h-6 w-6 text-gray-400 hover:text-red-500"
+                        onClick={() => openModal(tweet.id)}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -242,6 +290,26 @@ export default function Dashboard() {
               <Loader2 className="animate-spin text-blue-500" />
             </div>
           )}
+          {/* 删除确认弹窗 */}
+          <dialog ref={modalRef} id="my_modal_2" className="modal">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg mb-4">
+                Confirm to delete this tweet?
+              </h3>
+
+              <div className="flex justify-end gap-4">
+                <button className="btn" onClick={closeModal}>
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => deleteTweet(deletingIdRef.current)}
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </dialog>
         </section>
       </main>
     </div>
