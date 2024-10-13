@@ -4,15 +4,18 @@ import { createClient } from "@/libs/supabase/server";
 export async function GET(req: NextRequest) {
   const supabase = createClient();
   const searchParams = req.nextUrl.searchParams;
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userId = user.id;
+  let userId = searchParams.get("userId");
+  if (!userId) {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    userId = user.id;
+  }
   if (!userId) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
   }
   const page = searchParams.get("page") || "1";
-  const pageSize = searchParams.get("pageSize") || "10";
+  const pageSize = searchParams.get("pageSize") || "20";
   const pageNumber = parseInt(page, 10);
   const limit = parseInt(pageSize, 10);
   const offset = (pageNumber - 1) * limit;

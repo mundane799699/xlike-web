@@ -6,6 +6,7 @@ import { Popover, Transition } from "@headlessui/react";
 import { User } from "@supabase/supabase-js";
 import { createClient } from "@/libs/supabase/client";
 import apiClient from "@/libs/api";
+import { useAuth } from "@/hooks/use-auth";
 
 // A button to show user some account actions
 //  1. Billing: open a Stripe Customer Portal to manage their billing (cancel subscription, update payment method, etc.).
@@ -16,19 +17,7 @@ import apiClient from "@/libs/api";
 const ButtonAccount = () => {
   const supabase = createClient();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<User>(null);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      setUser(user);
-    };
-
-    getUser();
-  }, [supabase]);
+  const { user } = useAuth();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

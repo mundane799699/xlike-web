@@ -1,10 +1,12 @@
 "use client";
 
 import ButtonAccount from "@/components/ButtonAccount";
+import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/libs/api";
-import { Loader2 } from "lucide-react";
+import { ExternalLink, Loader2, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { createClient } from "@/libs/supabase/client";
 
 export const dynamic = "force-dynamic";
 
@@ -15,23 +17,42 @@ export default function Dashboard() {
   const [tweets, setTweets] = useState([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const { user, setUser } = useAuth();
+  const supabase = createClient();
 
-  const fetchData = useCallback(() => {
-    if (isLoading) {
-      return;
-    }
-    setIsLoading(true);
-    apiClient
-      .get("/tweet", { params: { page } })
-      .then((res) => {
-        setTweets((prev) => [...prev, ...res.data]);
-        setPage((prev) => prev + 1);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  }, [isLoading, page]);
+  const initFetch = async () => {
+    const userId = await fetchUser();
+    fetchData(userId);
+  };
+
+  const fetchUser = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    setUser(user);
+    return user?.id;
+  };
+
+  const fetchData = useCallback(
+    (userId?: string) => {
+      if (isLoading) {
+        return;
+      }
+      setIsLoading(true);
+      apiClient
+        .get("/tweet", { params: { page, userId: userId || user?.id } })
+        .then((res) => {
+          setTweets((prev) => [...prev, ...res.data]);
+          setPage((prev) => prev + 1);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setIsLoading(false);
+        });
+    },
+    [isLoading, page]
+  );
 
   const handleScroll = useCallback(
     useDebouncedCallback(() => {
@@ -41,7 +62,7 @@ export default function Dashboard() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
+      if (scrollTop + clientHeight >= scrollHeight - 1000) {
         fetchData();
       }
     }, 300),
@@ -54,7 +75,7 @@ export default function Dashboard() {
   }, [handleScroll]);
 
   useEffect(() => {
-    fetchData();
+    initFetch();
   }, []);
 
   return (
@@ -66,28 +87,9 @@ export default function Dashboard() {
         <section className="max-w-2xl mx-auto">
           {tweets.map((tweet) => (
             <div
-              key={tweet.tweet_id}
+              key={tweet.id}
               className="relative block bg-white rounded-lg shadow-md p-4 mb-4 hover:shadow-lg transition-shadow duration-200"
             >
-              <div className="absolute top-2 right-2">
-                <a
-                  href={`https://x.com/${tweet.screen_name}/status/${tweet.tweet_id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="View on X"
-                  className="text-[#1DA1F2] hover:text-[#0c85d0] cursor-pointer"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z" />
-                  </svg>
-                </a>
-              </div>
               <div className="flex items-center mb-2">
                 <img
                   src={tweet.avatar_url}
@@ -95,13 +97,29 @@ export default function Dashboard() {
                   className="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
-                  <h3 className="font-bold">{tweet.username}</h3>
-                  <p className="text-sm text-gray-500">@{tweet.screen_name}</p>
+                  <h3 className="font-bold">
+                    <a
+                      href={`https://x.com/${tweet.screen_name}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {tweet.username}
+                    </a>
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    <a
+                      href={`https://x.com/${tweet.screen_name}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      @{tweet.screen_name}
+                    </a>
+                  </p>
                 </div>
               </div>
               <p className="mb-2">{tweet.full_text}</p>
               {tweet.media_items && tweet.media_items.length > 0 && (
-                <div className="relative w-full flex justify-center">
+                <div className="relative w-full flex justify-center min-h-14">
                   <img
                     src={tweet.media_items[0].media_url_https}
                     alt="Tweet image"
@@ -139,10 +157,22 @@ export default function Dashboard() {
                     />
                     <div>
                       <h4 className="font-semibold text-sm">
-                        {tweet.quoted_tweet.username}
+                        <a
+                          href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {tweet.quoted_tweet.username}
+                        </a>
                       </h4>
                       <p className="text-xs text-gray-500">
-                        @{tweet.quoted_tweet.screen_name}
+                        <a
+                          href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          @{tweet.quoted_tweet.screen_name}
+                        </a>
                       </p>
                     </div>
                   </div>
@@ -180,6 +210,31 @@ export default function Dashboard() {
                     )}
                 </div>
               )}
+              {/* 底部布局，放删除按钮 */}
+              <div className="flex justify-between items-center mt-2 py-2">
+                <div className="text-sm text-gray-500">
+                  {new Date(tweet.created_at * 1000).toLocaleString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+                <div className="flex items-center space-x-4">
+                  <a
+                    href={`https://x.com/${tweet.screen_name}/status/${tweet.tweet_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:cursor-pointer"
+                  >
+                    <ExternalLink className="h-6 w-6 text-gray-400 hover:text-blue-500" />
+                  </a>
+                  <div className="hover:cursor-pointer">
+                    <Trash2 className="h-6 w-6 text-gray-400 hover:text-red-500" />
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
           {isLoading && (
