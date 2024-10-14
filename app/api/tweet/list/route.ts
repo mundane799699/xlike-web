@@ -16,35 +16,29 @@ export async function GET(req: NextRequest) {
   }
   const page = searchParams.get("page") || "1";
   const pageSize = searchParams.get("pageSize") || "20";
+  const searchTerm = searchParams.get("searchTerm") || "";
+  const sortColumn = searchParams.get("sortColumn") || "ti.sort_index";
+  const sortOrder = searchParams.get("sortOrder") || "DESC";
   const pageNumber = parseInt(page, 10);
   const limit = parseInt(pageSize, 10);
   const offset = (pageNumber - 1) * limit;
 
   try {
-    const { data, error, count } = await supabase
-      .from("tweet_interactions")
-      .select(
-        `
-        *,
-        tweets:tweets(*)
-      `,
-        { count: "exact" }
-      )
-      .eq("user_id", userId)
-      .order("sort_index", { ascending: false })
-      .range(offset, offset + limit - 1);
-
-    if (error) throw error;
-    const processedData = data.map((item) => {
-      const { tweets, ...rest } = item;
-      return { ...tweets, ...rest };
+    const { data, error } = await supabase.rpc("search_tweets", {
+      p_user_id: userId,
+      p_search_term: searchTerm,
+      p_offset: offset,
+      p_limit: limit,
+      p_sort_column: sortColumn,
+      p_sort_order: sortOrder,
     });
 
+    if (error) throw error;
+
     return NextResponse.json({
-      data: processedData,
+      data,
       page: pageNumber,
       pageSize: limit,
-      totalCount: count,
     });
   } catch (error) {
     console.error("Error fetching tweet interactions:", error);
