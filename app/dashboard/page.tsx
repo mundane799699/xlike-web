@@ -3,28 +3,41 @@
 import ButtonAccount from "@/components/ButtonAccount";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/libs/api";
-import { ExternalLink, Loader2, Trash2 } from "lucide-react";
+import { ExternalLink, Loader2, Search, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { createClient } from "@/libs/supabase/client";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export const dynamic = "force-dynamic";
 
 // This is a private page: It's protected by the layout.js component which ensures the user is authenticated.
 // It's a server compoment which means you can fetch data (like the user profile) before the page is rendered.
 // See https://shipfa.st/docs/tutorials/private-page
+type SearchParamsType = {
+  userId: string;
+  page?: number;
+  searchTerm?: string;
+};
+
 export default function Dashboard() {
   const [tweets, setTweets] = useState([]);
-  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const { user, setUser } = useAuth();
   const supabase = createClient();
   const modalRef = useRef<HTMLDialogElement>(null);
   const deletingIdRef = useRef<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchParamsRef = useRef<SearchParamsType>({
+    userId: "",
+    page: 1,
+    searchTerm: "",
+  });
+  const hasMore = useRef(true);
 
   const initFetch = async () => {
-    const userId = await fetchUser();
-    fetchData(userId);
+    await fetchUser();
+    fetchData(false);
   };
 
   const fetchUser = async () => {
@@ -33,30 +46,37 @@ export default function Dashboard() {
     } = await supabase.auth.getUser();
 
     setUser(user);
-    return user?.id;
+    searchParamsRef.current.userId = user?.id || "";
   };
 
   const fetchData = useCallback(
-    (userId?: string) => {
+    (isAppend: boolean = false) => {
       if (isLoading) {
         return;
       }
       setIsLoading(true);
       apiClient
-        .get("/tweet/list", { params: { page, userId: userId || user?.id } })
-        .then((res) => {
+        .get("/tweet/list", {
+          params: {
+            ...searchParamsRef.current,
+          },
+        })
+        .then((res: any) => {
           const updatedData: any[] = res.data.map((item: any) => {
             return { ...item, deleteLoading: false };
           });
-          setTweets((prev) => [...prev, ...updatedData]);
-          setPage((prev) => prev + 1);
+          setTweets((prev) => {
+            return isAppend ? [...prev, ...updatedData] : updatedData;
+          });
+          searchParamsRef.current.page = searchParamsRef.current.page + 1;
+          hasMore.current = res.hasMore;
           setIsLoading(false);
         })
         .catch(() => {
           setIsLoading(false);
         });
     },
-    [isLoading, page]
+    [isLoading]
   );
 
   const handleScroll = useCallback(
@@ -67,8 +87,8 @@ export default function Dashboard() {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
-      if (scrollTop + clientHeight >= scrollHeight - 1000) {
-        fetchData();
+      if (scrollTop + clientHeight >= scrollHeight - 1000 && hasMore.current) {
+        fetchData(true);
       }
     }, 300),
     [fetchData]
@@ -119,10 +139,45 @@ export default function Dashboard() {
     modalRef.current?.close();
   };
 
+  const search = () => {
+    searchParamsRef.current.page = 1;
+    fetchData(false);
+  };
+
+  const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    searchParamsRef.current.searchTerm = e.target.value;
+  };
+
   return (
     <div className="h-screen pt-16">
-      <header className="fixed top-0 left-0 right-0 bg-white z-10 p-4 flex justify-end shadow-md">
-        <ButtonAccount />
+      <header className="fixed top-0 left-0 right-0 bg-white z-10 p-4 flex items-center justify-between shadow-md">
+        <div className="flex-1"></div>
+        <div className="flex-1 flex justify-center">
+          <div className="flex-grow max-w-2xl relative">
+            <input
+              type="search"
+              placeholder="Search tweets..."
+              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchTerm}
+              onChange={handleSearchTermChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  search();
+                }
+              }}
+            />
+            <button
+              onClick={search}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 focus:outline-none"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+        <div className="flex-1 flex justify-end">
+          <ButtonAccount />
+        </div>
       </header>
       <main className="p-8 bg-blue-200 min-h-full">
         <section className="max-w-2xl mx-auto">
@@ -312,6 +367,7 @@ export default function Dashboard() {
           </dialog>
         </section>
       </main>
+      <ScrollToTop />
     </div>
   );
 }

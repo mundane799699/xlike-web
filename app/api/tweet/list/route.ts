@@ -15,9 +15,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
   }
   const page = searchParams.get("page") || "1";
-  const pageSize = searchParams.get("pageSize") || "20";
+  const pageSize = searchParams.get("pageSize") || "10";
   const searchTerm = searchParams.get("searchTerm") || "";
-  const sortColumn = searchParams.get("sortColumn") || "ti.sort_index";
+  const sortColumn = searchParams.get("sortColumn") || "sort_index";
   const sortOrder = searchParams.get("sortOrder") || "DESC";
   const pageNumber = parseInt(page, 10);
   const limit = parseInt(pageSize, 10);
@@ -39,6 +39,7 @@ export async function GET(req: NextRequest) {
       data,
       page: pageNumber,
       pageSize: limit,
+      hasMore: data.length === limit,
     });
   } catch (error) {
     console.error("Error fetching tweet interactions:", error);
