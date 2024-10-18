@@ -3,11 +3,32 @@
 import ButtonAccount from "@/components/ButtonAccount";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/libs/api";
-import { ExternalLink, Loader2, Search, Trash2 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  ChevronDownIcon,
+  ExternalLink,
+  Loader2,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { createClient } from "@/libs/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +39,7 @@ type SearchParamsType = {
   userId: string;
   page?: number;
   searchTerm?: string;
+  screen_name?: string;
 };
 
 export default function Dashboard() {
@@ -32,12 +54,45 @@ export default function Dashboard() {
     userId: "",
     page: 1,
     searchTerm: "",
+    screen_name: "",
   });
   const hasMore = useRef(true);
+  const authors = useRef([]);
+  const [inputValue, setInputValue] = useState("");
+  const filteredAuthors = useMemo(
+    () =>
+      inputValue
+        ? authors.current.filter(
+            (author) =>
+              author.username
+                .toLowerCase()
+                .includes(inputValue.toLowerCase()) ||
+              author.screen_name
+                .toLowerCase()
+                .includes(inputValue.toLowerCase())
+          )
+        : authors.current,
+    [inputValue, authors.current]
+  );
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const initFetch = async () => {
     await fetchUser();
     fetchData(false);
+    fetchAuthors();
+  };
+
+  const fetchAuthors = () => {
+    apiClient
+      .get("/tweet/authors", {
+        params: {
+          userId: searchParamsRef.current.userId,
+        },
+      })
+      .then((res) => {
+        authors.current = res.data;
+      });
   };
 
   const fetchUser = async () => {
@@ -153,26 +208,95 @@ export default function Dashboard() {
     <div className="h-screen pt-16">
       <header className="fixed top-0 left-0 right-0 bg-white z-10 p-4 flex items-center justify-between shadow-md">
         <div className="flex-1"></div>
-        <div className="flex-1 flex justify-center">
-          <div className="flex-grow max-w-2xl relative">
-            <input
-              type="search"
-              placeholder="Search tweets..."
-              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={searchTerm}
-              onChange={handleSearchTermChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  search();
-                }
-              }}
-            />
-            <button
-              onClick={search}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 focus:outline-none"
-            >
-              <Search className="h-5 w-5" />
-            </button>
+        <div className="flex-1 flex">
+          <div className="flex w-full items-center">
+            <div className="flex-grow relative">
+              <input
+                type="search"
+                placeholder="Search tweets..."
+                className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={searchTerm}
+                onChange={handleSearchTermChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    search();
+                  }
+                }}
+              />
+              <button
+                onClick={search}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 focus:outline-none"
+              >
+                <Search className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="flex justify-end w-48">
+              {selectedAuthor ? (
+                <div className="flex items-center">
+                  <span className="text-sm text-gray-500 border border-gray-300 rounded-full px-2 py-1">
+                    {selectedAuthor.screen_name}
+                  </span>
+                  <X
+                    className="ml-2 h-4 w-4 cursor-pointer"
+                    onClick={() => {
+                      setSelectedAuthor(null);
+                      searchParamsRef.current.screen_name = "";
+                    }}
+                  />
+                </div>
+              ) : (
+                <Popover open={isOpen} onOpenChange={setIsOpen}>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline">
+                      Select author
+                      <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0" align="end">
+                    <Command>
+                      <CommandInput
+                        placeholder="Select author"
+                        value={inputValue}
+                        onValueChange={setInputValue}
+                      />
+                      <CommandList>
+                        <CommandEmpty>Select author</CommandEmpty>
+                        <CommandGroup>
+                          {filteredAuthors.map((author) => (
+                            <CommandItem
+                              key={author.screen_name}
+                              value={author.username}
+                              onSelect={() => {
+                                searchParamsRef.current.screen_name =
+                                  author.screen_name;
+                                setSelectedAuthor(author);
+                                setIsOpen(false);
+                                setInputValue("");
+                              }}
+                            >
+                              <div className="flex items-center">
+                                <img
+                                  src={author.avatar_url}
+                                  alt={author.username}
+                                  className="w-8 h-8 rounded-full mr-3"
+                                />
+                                <div className="flex flex-col">
+                                  <span>{author.username}</span>
+                                  <span className="text-sm text-gray-500">
+                                    @{author.screen_name}
+                                  </span>
+                                </div>
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex-1 flex justify-end">
