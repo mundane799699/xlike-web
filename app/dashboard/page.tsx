@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 // This is a private page: It's protected by the layout.js component which ensures the user is authenticated.
 // It's a server compoment which means you can fetch data (like the user profile) before the page is rendered.
@@ -39,7 +39,7 @@ type SearchParamsType = {
   userId: string;
   page?: number;
   searchTerm?: string;
-  screen_name?: string;
+  screenName?: string;
 };
 
 export default function Dashboard() {
@@ -54,7 +54,7 @@ export default function Dashboard() {
     userId: "",
     page: 1,
     searchTerm: "",
-    screen_name: "",
+    screenName: "",
   });
   const hasMore = useRef(true);
   const authors = useRef([]);
@@ -241,7 +241,7 @@ export default function Dashboard() {
                     className="ml-2 h-4 w-4 cursor-pointer"
                     onClick={() => {
                       setSelectedAuthor(null);
-                      searchParamsRef.current.screen_name = "";
+                      searchParamsRef.current.screenName = "";
                     }}
                   />
                 </div>
@@ -268,7 +268,7 @@ export default function Dashboard() {
                               key={author.screen_name}
                               value={author.username}
                               onSelect={() => {
-                                searchParamsRef.current.screen_name =
+                                searchParamsRef.current.screenName =
                                   author.screen_name;
                                 setSelectedAuthor(author);
                                 setIsOpen(false);

@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
   const page = searchParams.get("page") || "1";
   const pageSize = searchParams.get("pageSize") || "10";
   const searchTerm = searchParams.get("searchTerm") || "";
+  const screenName = searchParams.get("screenName") || "";
   const sortColumn = searchParams.get("sortColumn") || "sort_index";
   const sortOrder = searchParams.get("sortOrder") || "DESC";
   const pageNumber = parseInt(page, 10);
@@ -27,6 +28,7 @@ export async function GET(req: NextRequest) {
     const { data, error } = await supabase.rpc("search_tweets", {
       p_user_id: userId,
       p_search_term: searchTerm,
+      p_screen_name: screenName,
       p_offset: offset,
       p_limit: limit,
       p_sort_column: sortColumn,
