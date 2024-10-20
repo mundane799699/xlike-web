@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
   }
   const page = searchParams.get("page") || "1";
-  const pageSize = searchParams.get("pageSize") || "10";
+  const pageSize = searchParams.get("pageSize") || "20";
   const searchTerm = searchParams.get("searchTerm") || "";
   const screenName = searchParams.get("screenName") || "";
   const sortColumn = searchParams.get("sortColumn") || "sort_index";

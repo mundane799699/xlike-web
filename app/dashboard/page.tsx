@@ -44,7 +44,8 @@ type SearchParamsType = {
 
 export default function Dashboard() {
   const [tweets, setTweets] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [appendLoading, setAppendLoading] = useState(false);
+  const [topLoading, setTopLoading] = useState(false);
   const { user, setUser } = useAuth();
   const supabase = createClient();
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -106,10 +107,10 @@ export default function Dashboard() {
 
   const fetchData = useCallback(
     (isAppend: boolean = false) => {
-      if (isLoading) {
+      if (appendLoading || topLoading) {
         return;
       }
-      setIsLoading(true);
+      isAppend ? setAppendLoading(true) : setTopLoading(true);
       apiClient
         .get("/tweet/list", {
           params: {
@@ -123,20 +124,26 @@ export default function Dashboard() {
           setTweets((prev) => {
             return isAppend ? [...prev, ...updatedData] : updatedData;
           });
+          if (!isAppend) {
+            // 滚动到顶部
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
           searchParamsRef.current.page = searchParamsRef.current.page + 1;
           hasMore.current = res.hasMore;
-          setIsLoading(false);
+          setAppendLoading(false);
+          setTopLoading(false);
         })
         .catch(() => {
-          setIsLoading(false);
+          setAppendLoading(false);
+          setTopLoading(false);
         });
     },
-    [isLoading]
+    [appendLoading, topLoading]
   );
 
   const handleScroll = useCallback(
     useDebouncedCallback(() => {
-      if (isLoading) {
+      if (appendLoading || topLoading) {
         return;
       }
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -303,6 +310,11 @@ export default function Dashboard() {
           <ButtonAccount />
         </div>
       </header>
+      {topLoading && (
+        <div className="fixed top-20 left-0 right-0 flex justify-center items-center z-50">
+          <Loader2 className="animate-spin text-blue-500 h-12 w-12" />
+        </div>
+      )}
       <main className="p-8 bg-blue-200 min-h-full">
         <section className="max-w-2xl mx-auto">
           {tweets.map((tweet) => (
@@ -464,9 +476,9 @@ export default function Dashboard() {
               </div>
             </div>
           ))}
-          {isLoading && (
+          {appendLoading && (
             <div className="flex justify-center items-center">
-              <Loader2 className="animate-spin text-blue-500" />
+              <Loader2 className="animate-spin text-blue-500 h-12 w-12" />
             </div>
           )}
           {/* 删除确认弹窗 */}
