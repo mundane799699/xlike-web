@@ -29,6 +29,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
+import Text from "@/components/tweet/text";
+import Cover from "@/components/tweet/cover";
 
 // export const dynamic = "force-dynamic";
 
@@ -349,34 +351,9 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
-              <p className="mb-2">{tweet.full_text}</p>
+              <Text text={tweet.full_text} searchTerm={searchTerm} />
               {tweet.media_items && tweet.media_items.length > 0 && (
-                <div className="relative w-full flex justify-center min-h-14">
-                  <img
-                    src={tweet.media_items[0].media_url_https}
-                    alt="Tweet image"
-                    className="max-h-[520px]"
-                  />
-                  {tweet.media_items[0].type !== "photo" && (
-                    <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full">
-                      <svg viewBox="0 0 60 61" aria-hidden="true">
-                        <g>
-                          <circle
-                            cx="30"
-                            cy="30.4219"
-                            fill="#333333"
-                            opacity="0.6"
-                            r="30"
-                          ></circle>
-                          <path
-                            d="M22.2275 17.1971V43.6465L43.0304 30.4218L22.2275 17.1971Z"
-                            fill="white"
-                          ></path>
-                        </g>
-                      </svg>
-                    </div>
-                  )}
-                </div>
+                <Cover media_item={tweet.media_items[0]} />
               )}
               {/* 引用的推文 */}
               {tweet.quoted_tweet && (
@@ -411,34 +388,7 @@ export default function Dashboard() {
                   <p className="text-sm mb-2">{tweet.quoted_tweet.full_text}</p>
                   {tweet.quoted_tweet.media_items &&
                     tweet.quoted_tweet.media_items.length > 0 && (
-                      <div className="relative w-full flex justify-center">
-                        <img
-                          src={
-                            tweet.quoted_tweet.media_items[0].media_url_https
-                          }
-                          alt="Quoted tweet image"
-                          className="rounded-lg max-h-[520px]"
-                        />
-                        {tweet.quoted_tweet.media_items[0].type !== "photo" && (
-                          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black bg-opacity-50">
-                            <svg viewBox="0 0 60 61" aria-hidden="true">
-                              <g>
-                                <circle
-                                  cx="30"
-                                  cy="30.4219"
-                                  fill="#333333"
-                                  opacity="0.6"
-                                  r="30"
-                                ></circle>
-                                <path
-                                  d="M22.2275 17.1971V43.6465L43.0304 30.4218L22.2275 17.1971Z"
-                                  fill="white"
-                                ></path>
-                              </g>
-                            </svg>
-                          </div>
-                        )}
-                      </div>
+                      <Cover media_item={tweet.quoted_tweet.media_items[0]} />
                     )}
                 </div>
               )}
