@@ -3,8 +3,6 @@ import { createClient } from "@/libs/supabase/server";
 
 export async function GET(req: NextRequest) {
   const supabase = createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return NextResponse.json(session);
+  const { data } = await supabase.auth.getSession();
+  return NextResponse.json(data);
 }
