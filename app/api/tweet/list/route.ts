@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
   const screenName = searchParams.get("screenName") || "";
   const sortColumn = searchParams.get("sortColumn") || "sort_index";
   const sortOrder = searchParams.get("sortOrder") || "DESC";
+  const interactionType = searchParams.get("interactionType") || "all";
   const pageNumber = parseInt(page, 10);
   const limit = parseInt(pageSize, 10);
   const offset = (pageNumber - 1) * limit;
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest) {
       p_limit: limit,
       p_sort_column: sortColumn,
       p_sort_order: sortOrder,
+      p_interaction_type: interactionType,
     });
 
     if (error) throw error;

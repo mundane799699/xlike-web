@@ -52,6 +52,7 @@ type SearchParamsType = {
   page?: number;
   searchTerm?: string;
   screenName?: string;
+  interactionType?: string;
 };
 
 export default function Dashboard() {
@@ -63,11 +64,13 @@ export default function Dashboard() {
   const modalRef = useRef<HTMLDialogElement>(null);
   const deletingIdRef = useRef<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [highlightSearchTerm, setHighlightSearchTerm] = useState("");
   const searchParamsRef = useRef<SearchParamsType>({
     userId: "",
     page: 1,
     searchTerm: "",
     screenName: "",
+    interactionType: "all",
   });
   const hasMore = useRef(true);
   const authors = useRef([]);
@@ -122,7 +125,14 @@ export default function Dashboard() {
       if (appendLoading || topLoading) {
         return;
       }
-      isAppend ? setAppendLoading(true) : setTopLoading(true);
+      if (isAppend) {
+        setAppendLoading(true);
+      } else {
+        searchParamsRef.current.page = 1;
+        setTopLoading(true);
+        // 滚动到顶部
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
       apiClient
         .get("/tweet/list", {
           params: {
@@ -136,10 +146,7 @@ export default function Dashboard() {
           setTweets((prev) => {
             return isAppend ? [...prev, ...updatedData] : updatedData;
           });
-          if (!isAppend) {
-            // 滚动到顶部
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }
+          setHighlightSearchTerm(searchParamsRef.current.searchTerm);
           searchParamsRef.current.page = searchParamsRef.current.page + 1;
           hasMore.current = res.hasMore;
           setAppendLoading(false);
@@ -214,7 +221,6 @@ export default function Dashboard() {
   };
 
   const search = () => {
-    searchParamsRef.current.page = 1;
     fetchData(false);
   };
 
@@ -223,130 +229,158 @@ export default function Dashboard() {
     searchParamsRef.current.searchTerm = e.target.value;
   };
 
+  const handleSelectInteractionType = (value: string) => {
+    searchParamsRef.current.interactionType = value;
+    fetchData(false);
+  };
+
+  const handleSelectAuthor = (author: any) => {
+    searchParamsRef.current.screenName = author.screen_name;
+    setSelectedAuthor(author);
+    setIsOpen(false);
+    setInputValue("");
+    fetchData(false);
+  };
+
+  const clearAuthor = () => {
+    setSelectedAuthor(null);
+    searchParamsRef.current.screenName = "";
+    fetchData(false);
+  };
+
+  const clearSearchTerm = () => {
+    setSearchTerm("");
+    searchParamsRef.current.searchTerm = "";
+    fetchData(false);
+  };
+
   return (
-    <div className="h-screen pt-16">
+    <div className="pt-16">
       <header className="fixed top-0 left-0 right-0 bg-white z-10 p-4 flex items-center justify-between shadow-md">
         <div className="flex-1"></div>
-        <div className="flex-1 flex">
-          <div className="flex w-full items-center">
-            <div className="flex-grow relative">
-              <input
-                type="search"
-                placeholder="Search tweets..."
-                className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={searchTerm}
-                onChange={handleSearchTermChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    search();
-                  }
-                }}
-              />
+        <div className="flex-1 flex w-full items-center">
+          <div className="flex-grow relative">
+            <input
+              type="text"
+              placeholder="Search tweets..."
+              className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchTerm}
+              onChange={handleSearchTermChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  search();
+                }
+              }}
+            />
+            {searchTerm && (
               <button
-                onClick={search}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 focus:outline-none"
+                onClick={clearSearchTerm}
+                className="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 focus:outline-none"
               >
-                <Search className="h-5 w-5" />
+                <X className="h-5 w-5" />
               </button>
-            </div>
+            )}
+            <button
+              onClick={search}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 focus:outline-none"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+          </div>
 
-            <div className="flex justify-end w-48">
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="like">Like</SelectItem>
-                  <SelectItem value="bookmark">Bookmark</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          {/* 选择互动类型 */}
+          <div className="flex w-48 ml-2">
+            <Select
+              defaultValue="all"
+              onValueChange={handleSelectInteractionType}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="like">Like</SelectItem>
+                <SelectItem value="bookmark">Bookmark</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            <div className="flex justify-end w-48">
-              {selectedAuthor ? (
-                <div className="flex items-center">
-                  <span className="text-sm text-gray-500 border border-gray-300 rounded-full px-2 py-1">
-                    {selectedAuthor.screen_name}
-                  </span>
-                  <X
-                    className="ml-2 h-4 w-4 cursor-pointer"
-                    onClick={() => {
-                      setSelectedAuthor(null);
-                      searchParamsRef.current.screenName = "";
-                    }}
-                  />
-                </div>
-              ) : (
-                <Popover open={isOpen} onOpenChange={setIsOpen}>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline">
-                      Select author
-                      <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="p-0" align="end">
-                    <Command>
-                      <CommandInput
-                        placeholder="Select author"
-                        value={inputValue}
-                        onValueChange={setInputValue}
-                      />
-                      <CommandList>
-                        <CommandEmpty>Select author</CommandEmpty>
-                        <CommandGroup>
-                          {filteredAuthors.map((author) => (
-                            <CommandItem
-                              key={author.screen_name}
-                              value={author.username}
-                              onSelect={() => {
-                                searchParamsRef.current.screenName =
-                                  author.screen_name;
-                                setSelectedAuthor(author);
-                                setIsOpen(false);
-                                setInputValue("");
-                              }}
-                            >
-                              <div className="flex items-center">
-                                <img
-                                  src={author.avatar_url}
-                                  alt={author.username}
-                                  className="w-8 h-8 rounded-full mr-3"
-                                />
-                                <div className="flex flex-col">
-                                  <span>{author.username}</span>
-                                  <span className="text-sm text-gray-500">
-                                    @{author.screen_name}
-                                  </span>
-                                </div>
+          {/* 选择作者 */}
+          <div className="flex w-48">
+            {selectedAuthor ? (
+              <div className="flex items-center">
+                <span className="text-sm text-gray-500 border border-gray-300 rounded-full px-2 py-1">
+                  {selectedAuthor.screen_name}
+                </span>
+                <X
+                  className="ml-2 h-4 w-4 cursor-pointer"
+                  onClick={clearAuthor}
+                />
+              </div>
+            ) : (
+              <Popover open={isOpen} onOpenChange={setIsOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline">
+                    Select author
+                    <ChevronDownIcon className="ml-2 h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-0" align="end">
+                  <Command>
+                    <CommandInput
+                      placeholder="Select author"
+                      value={inputValue}
+                      onValueChange={setInputValue}
+                    />
+                    <CommandList>
+                      <CommandEmpty>Select author</CommandEmpty>
+                      <CommandGroup>
+                        {filteredAuthors.map((author) => (
+                          <CommandItem
+                            key={author.screen_name}
+                            value={author.username}
+                            onSelect={() => handleSelectAuthor(author)}
+                          >
+                            <div className="flex items-center">
+                              <img
+                                src={author.avatar_url}
+                                alt={author.username}
+                                className="w-8 h-8 rounded-full mr-3"
+                              />
+                              <div className="flex flex-col">
+                                <span>{author.username}</span>
+                                <span className="text-sm text-gray-500">
+                                  @{author.screen_name}
+                                </span>
                               </div>
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              )}
-            </div>
+                            </div>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         </div>
         <div className="flex-1 flex justify-end">
           <ButtonAccount />
         </div>
       </header>
-      {topLoading && (
-        <div className="fixed top-20 left-0 right-0 flex justify-center items-center z-50">
-          <Loader2 className="animate-spin text-blue-500 h-12 w-12" />
-        </div>
-      )}
-      <main className="p-8 bg-blue-200 min-h-full">
+
+      <main className="p-8 bg-blue-200 min-h-screen">
         <section className="max-w-2xl mx-auto">
+          {topLoading && (
+            <div className="flex justify-center items-center mb-2">
+              <Loader2 className="animate-spin text-blue-500 h-12 w-12" />
+            </div>
+          )}
           {tweets.map((tweet) => (
             <TweetCard
               key={tweet.id}
               tweet={tweet}
-              searchTerm={searchTerm}
+              searchTerm={highlightSearchTerm}
               openModal={openModal}
             />
           ))}
