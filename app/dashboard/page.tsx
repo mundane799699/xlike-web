@@ -3,14 +3,7 @@
 import ButtonAccount from "@/components/ButtonAccount";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/libs/api";
-import {
-  ChevronDownIcon,
-  ExternalLink,
-  Loader2,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ChevronDownIcon, Loader2, Search, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { createClient } from "@/libs/supabase/client";
@@ -29,8 +22,6 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
-import Text from "@/components/tweet/text";
-import Cover from "@/components/tweet/cover";
 import TweetCard from "@/components/tweet/TweetCard";
 import {
   Select,
@@ -61,7 +52,6 @@ export default function Dashboard() {
   const [topLoading, setTopLoading] = useState(false);
   const { user, setUser } = useAuth();
   const supabase = createClient();
-  const modalRef = useRef<HTMLDialogElement>(null);
   const deletingIdRef = useRef<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [highlightSearchTerm, setHighlightSearchTerm] = useState("");
@@ -92,6 +82,7 @@ export default function Dashboard() {
   );
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const initFetch = async () => {
     await fetchUser();
@@ -185,7 +176,7 @@ export default function Dashboard() {
   }, []);
 
   const deleteTweet = async (id: string) => {
-    modalRef.current?.close();
+    setDeleteModalOpen(false);
     setTweets((prev) =>
       prev.map((tweet) =>
         tweet.id === id ? { ...tweet, deleteLoading: true } : tweet
@@ -212,12 +203,12 @@ export default function Dashboard() {
 
   const openModal = (id: string) => {
     deletingIdRef.current = id;
-    modalRef.current?.showModal();
+    setDeleteModalOpen(true);
   };
 
   const closeModal = () => {
     deletingIdRef.current = null;
-    modalRef.current?.close();
+    setDeleteModalOpen(false);
   };
 
   const search = () => {
@@ -390,25 +381,27 @@ export default function Dashboard() {
             </div>
           )}
           {/* 删除确认弹窗 */}
-          <dialog ref={modalRef} id="my_modal_2" className="modal">
-            <div className="modal-box">
-              <h3 className="font-bold text-lg mb-4">
-                Confirm to delete this tweet?
-              </h3>
+          {deleteModalOpen && (
+            <div className="z-[9999] fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-lg">
+                <h3 className="font-bold text-lg mb-4">
+                  Confirm to delete this tweet?
+                </h3>
 
-              <div className="flex justify-end gap-4">
-                <button className="btn" onClick={closeModal}>
-                  Cancel
-                </button>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => deleteTweet(deletingIdRef.current)}
-                >
-                  Confirm
-                </button>
+                <div className="flex justify-end gap-4">
+                  <button className="btn" onClick={closeModal}>
+                    Cancel
+                  </button>
+                  <button
+                    className="btn bg-red-500 text-white"
+                    onClick={() => deleteTweet(deletingIdRef.current)}
+                  >
+                    Confirm
+                  </button>
+                </div>
               </div>
             </div>
-          </dialog>
+          )}
         </section>
       </main>
       <ScrollToTop />
