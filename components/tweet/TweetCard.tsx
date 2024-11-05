@@ -1,6 +1,7 @@
 import { Bookmark, ExternalLink, Heart, Loader2, Trash2 } from "lucide-react";
 import Text from "@/components/tweet/text";
 import Cover from "@/components/tweet/cover";
+import MediaItems from "./MediaItems";
 
 interface TweetCardProps {
   tweet: any;
@@ -23,71 +24,64 @@ const TweetCard = ({ tweet, searchTerm, openModal }: TweetCardProps) => {
         )}
       </div>
       <div className="flex items-center mb-2">
-        <img
-          src={tweet.avatar_url}
-          alt={tweet.username}
-          className="w-10 h-10 rounded-full mr-3"
-        />
-        <div>
-          <h3 className="font-bold">
-            <a
-              href={`https://x.com/${tweet.screen_name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {tweet.username}
-            </a>
-          </h3>
-          <p className="text-sm text-gray-500">
-            <a
-              href={`https://x.com/${tweet.screen_name}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              @{tweet.screen_name}
-            </a>
-          </p>
-        </div>
+        <a
+          href={`https://x.com/${tweet.screen_name}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center"
+        >
+          <img
+            src={tweet.avatar_url}
+            alt={tweet.username}
+            className="w-10 h-10 rounded-full mr-3"
+          />
+          <div>
+            <h3 className="font-bold">{tweet.username}</h3>
+            <p className="text-sm text-gray-500">@{tweet.screen_name}</p>
+          </div>
+        </a>
       </div>
       <Text text={tweet.full_text} searchTerm={searchTerm} />
-      {tweet.media_items && tweet.media_items.length > 0 && (
-        <Cover media_item={tweet.media_items[0]} />
-      )}
+      <MediaItems media_items={tweet.media_items} />
       {/* 引用的推文 */}
       {tweet.quoted_tweet && (
         <div className="mt-3 border rounded-lg p-3 bg-gray-50">
           <div className="flex items-center mb-2">
-            <img
-              src={tweet.quoted_tweet.avatar_url}
-              alt={tweet.quoted_tweet.username}
-              className="w-8 h-8 rounded-full mr-2"
-            />
-            <div>
-              <h4 className="font-semibold text-sm">
-                <a
-                  href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {tweet.quoted_tweet.username}
-                </a>
-              </h4>
-              <p className="text-xs text-gray-500">
-                <a
-                  href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  @{tweet.quoted_tweet.screen_name}
-                </a>
-              </p>
-            </div>
+            <a
+              href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <img
+                src={tweet.quoted_tweet.avatar_url}
+                alt={tweet.quoted_tweet.username}
+                className="w-8 h-8 rounded-full mr-2"
+              />
+              <div>
+                <h4 className="font-semibold text-sm">
+                  <a
+                    href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {tweet.quoted_tweet.username}
+                  </a>
+                </h4>
+                <p className="text-xs text-gray-500">
+                  <a
+                    href={`https://x.com/${tweet.quoted_tweet.screen_name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    @{tweet.quoted_tweet.screen_name}
+                  </a>
+                </p>
+              </div>
+            </a>
           </div>
           <p className="text-sm mb-2">{tweet.quoted_tweet.full_text}</p>
-          {tweet.quoted_tweet.media_items &&
-            tweet.quoted_tweet.media_items.length > 0 && (
-              <Cover media_item={tweet.quoted_tweet.media_items[0]} />
-            )}
+          <MediaItems media_items={tweet.quoted_tweet.media_items} />
         </div>
       )}
       {/* 底部布局，放删除按钮 */}

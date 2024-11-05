@@ -14,7 +14,7 @@ const Cover = ({ media_item }: { media_item: MediaItem }) => {
 
   const src = media_item.media_url_https;
   return (
-    <div className="relative w-full flex justify-center min-h-14">
+    <div className="relative w-full flex justify-center min-h-14 mb-2">
       <a href={url || src} target="_blank" rel="noopener noreferrer">
         <img
           src={media_item.media_url_https}
@@ -46,3 +46,4 @@ const Cover = ({ media_item }: { media_item: MediaItem }) => {
 };
 
 export default Cover;
+export type { MediaItem };
