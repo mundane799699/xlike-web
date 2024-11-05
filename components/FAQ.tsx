@@ -26,7 +26,7 @@ const faqList: FAQItemProps[] = [
     question: "Where is my likes & bookmarks data stored?",
     answer: (
       <p>
-        It's stored in your browser, a database called indexdb. We will not
+        It&apos;s stored in your browser, a database called indexdb. We will not
         disclose your personal data.
       </p>
     ),
