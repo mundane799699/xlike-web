@@ -13,6 +13,16 @@ interface FAQItemProps {
 
 const faqList: FAQItemProps[] = [
   {
+    question: "What is Xlike?",
+    answer: (
+      <p>
+        Xlike is a browser extension tailored specifically for X/Twitter users.
+        With Xlike, you can easily manage your likes and bookmarks, and search
+        them with ease.
+      </p>
+    ),
+  },
+  {
     question: "Where is my likes & bookmarks data stored?",
     answer: (
       <p>
@@ -22,13 +32,11 @@ const faqList: FAQItemProps[] = [
     ),
   },
   {
-    question: "What features are planned for future development?",
+    question: "What's the difference between paid and free version?",
     answer: (
       <p>
-        We plan to develop functionality to synchronize your local Twitter likes
-        to a server, enabling access across multiple devices. Additionally, we
-        aim to provide more accurate search capabilities and implement
-        categorization features for your likes.
+        The paid version allows you to upload your data to our servers, so you
+        can access your data across multiple devices.
       </p>
     ),
   },

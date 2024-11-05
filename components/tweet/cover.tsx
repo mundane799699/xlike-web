@@ -16,11 +16,7 @@ const Cover = ({ media_item }: { media_item: MediaItem }) => {
   return (
     <div className="relative w-full flex justify-center min-h-14 mb-2">
       <a href={url || src} target="_blank" rel="noopener noreferrer">
-        <img
-          src={media_item.media_url_https}
-          alt="Tweet image"
-          className="max-h-[520px]"
-        />
+        <img src={src} alt="Tweet image" className="max-h-[520px]" />
       </a>
       {media_item.type !== "photo" && (
         <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex h-14 w-14 items-center justify-center rounded-full">

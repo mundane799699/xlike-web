@@ -32,6 +32,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
+import config from "@/config";
+import Image from "next/image";
+import logo from "@/app/icon.png";
 
 // export const dynamic = "force-dynamic";
 
@@ -248,7 +252,24 @@ export default function Dashboard() {
   return (
     <div className="pt-16">
       <header className="fixed top-0 left-0 right-0 bg-white z-10 p-4 flex items-center justify-between shadow-md">
-        <div className="flex-1"></div>
+        <div className="flex-1">
+          <Link
+            className="flex items-center gap-2 shrink-0 ml-4"
+            href="/"
+            title={`${config.appName} homepage`}
+          >
+            <Image
+              src={logo}
+              alt={`${config.appName} logo`}
+              className="w-8"
+              placeholder="blur"
+              priority={true}
+              width={32}
+              height={32}
+            />
+            <span className="font-extrabold text-lg">{config.appName}</span>
+          </Link>
+        </div>
         <div className="flex-1 flex w-full items-center">
           <div className="flex-grow relative">
             <input

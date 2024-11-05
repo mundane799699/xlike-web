@@ -16,7 +16,7 @@ const Pricing = () => {
 
         <div className="relative flex justify-center flex-col lg:flex-row items-center lg:items-stretch gap-8">
           {/* free plan */}
-          <div className="relative w-full max-w-lg rounded-2xl bg-base-100">
+          <div className="relative w-full max-w-lg rounded-2xl bg-base-100 hover:scale-105 transition-transform duration-300 hover:shadow-xl">
             <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10  p-8 ">
               <div className="flex justify-between items-center gap-4">
                 <div>
@@ -50,7 +50,7 @@ const Pricing = () => {
             </div>
           </div>
           {/* 1 Month Plan */}
-          <div className="relative w-full max-w-lg rounded-2xl bg-base-100">
+          <div className="relative w-full max-w-lg rounded-2xl bg-base-100 hover:scale-105 transition-transform duration-300 hover:shadow-xl">
             <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10  p-8 ">
               <div className="flex justify-between items-center gap-4">
                 <div>
@@ -98,7 +98,7 @@ const Pricing = () => {
             </div>
           </div>
           {/* 3 Months Plan */}
-          <div className="relative w-full max-w-lg rounded-2xl bg-base-100">
+          <div className="relative w-full max-w-lg rounded-2xl bg-base-100 hover:scale-105 transition-transform duration-300 hover:shadow-xl">
             <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10  p-8 ">
               <div className="flex justify-between items-center gap-4">
                 <div>
@@ -146,7 +146,7 @@ const Pricing = () => {
             </div>
           </div>
           {/* 1 Year Plan */}
-          <div className="relative w-full max-w-lg rounded-2xl bg-base-100">
+          <div className="relative w-full max-w-lg rounded-2xl bg-base-100 hover:scale-105 transition-transform duration-300 hover:shadow-xl">
             <div className="relative flex flex-col h-full gap-5 lg:gap-8 z-10  p-8 ">
               <div className="flex justify-between items-center gap-4">
                 <div>
