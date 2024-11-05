@@ -219,7 +219,7 @@ const FeaturesAccordion = () => {
           Never lose a tweet you love
         </h2>
         <p className="text-lg leading-relaxed mb-24">
-          Transform your Twitter likes into a searchable archive.
+          Transform your Twitter likes & bookmarks into a searchable archive.
         </p>
         <div className="lg:w-full flex flex-col items-center">
           <video
@@ -227,14 +227,14 @@ const FeaturesAccordion = () => {
             controls
             className="w-[1920px] object-cover object-top rounded mb-12"
           ></video>
-          <Image
+          {/* <Image
             src="/screenshot.png"
             alt="Product Demo"
             className="w-full rounded"
             priority={true}
             width={2633}
             height={1372}
-          />
+          /> */}
         </div>
       </div>
     </section>

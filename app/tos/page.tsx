@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
-
+import { Metadata } from "next";
 // CHATGPT PROMPT TO GENERATE YOUR TERMS & SERVICES — replace with your own data 👇
 
 // 1. Go to https://chat.openai.com/
@@ -25,10 +25,12 @@ import config from "@/config";
 
 // Please write a simple Terms & Services for my site. Add the current date. Do not add or explain your reasoning. Answer:
 
-export const metadata = getSEOTags({
+export const metadata: Metadata = {
   title: `Terms and Conditions | ${config.appName}`,
-  canonicalUrlRelative: "/tos",
-});
+  alternates: {
+    canonical: "/tos",
+  },
+};
 
 const TOS = () => {
   return (
@@ -65,7 +67,7 @@ These Terms of Service ("Terms") govern your use of the Xlike browser extension 
 
 1. Description of Xlike
 
-Xlike is a browser extension that allows users to save and search their Twitter likes, storing the data in IndexedDB for easy access and management.
+Xlike is a browser extension that allows users to save and search their Twitter likes & bookmarks, storing the data in IndexedDB for easy access and management.
 
 2. Ownership and Usage Rights
 

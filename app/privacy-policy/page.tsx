@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
-
+import { Metadata } from "next";
 // CHATGPT PROMPT TO GENERATE YOUR PRIVACY POLICY — replace with your own data 👇
 
 // 1. Go to https://chat.openai.com/
@@ -25,10 +25,12 @@ import config from "@/config";
 
 // Please write a simple privacy policy for my site. Add the current date.  Do not add or explain your reasoning. Answer:
 
-export const metadata = getSEOTags({
+export const metadata: Metadata = {
   title: `Privacy Policy | ${config.appName}`,
-  canonicalUrlRelative: "/privacy-policy",
-});
+  alternates: {
+    canonical: "/privacy-policy",
+  },
+};
 
 const PrivacyPolicy = () => {
   return (
@@ -70,7 +72,7 @@ By installing or using the Extension, you agree to the terms of this Privacy Pol
 We collect and store the following personal information:
 
 - User account information: We collect your email address when you create an account to enable multi-device synchronization.
-- Twitter likes data: We store your Twitter likes data on our secure servers to provide seamless access across multiple devices.
+- Twitter likes & bookmarks data: We store your Twitter likes & bookmarks data on our secure servers to provide seamless access across multiple devices.
 
 1.2 Non-Personal Data
 
@@ -78,20 +80,20 @@ We may use cookies or similar technologies to collect non-personal information s
 
 2. Data Storage and Usage
 
-2.1 Twitter Like Data
+2.1 Twitter Likes & Bookmarks Data
 
-The Extension initially stores your Twitter likes data locally in your browser's IndexedDB. To enable multi-device access, this data is also securely transmitted to and stored on our servers.
+The Extension initially stores your Twitter likes & bookmarks data locally in your browser's IndexedDB. To enable multi-device access, this data is also securely transmitted to and stored on our servers.
 
 2.2 Purpose of Data Storage
 
-We store your Twitter likes data for the following purposes:
-- To allow you to search and manage your likes within the Extension
-- To provide synchronization of your likes across multiple devices
+We store your Twitter likes & bookmarks data for the following purposes:
+- To allow you to search and manage your likes & bookmarks within the Extension
+- To provide synchronization of your likes & bookmarks across multiple devices
 - To backup your data to prevent loss
 
 3. Data Sharing
 
-We do not share your personal data or Twitter likes data with third parties, except as required to provide our services (e.g., cloud storage providers). We do not sell, trade, or rent your personal information to others.
+We do not share your personal data or Twitter likes & bookmarks data with third parties, except as required to provide our services (e.g., cloud storage providers). We do not sell, trade, or rent your personal information to others.
 
 4. Data Security
 
@@ -111,7 +113,7 @@ We may update this Privacy Policy from time to time to reflect changes in our pr
 
 8. Your Rights
 
-You have the right to access, correct, or delete your personal information and Twitter likes data stored on our servers. You can exercise these rights by contacting us at the email address provided below.
+You have the right to access, correct, or delete your personal information and Twitter likes & bookmarks data stored on our servers. You can exercise these rights by contacting us at the email address provided below.
 
 9. Contact Information
 
