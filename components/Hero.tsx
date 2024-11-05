@@ -7,11 +7,11 @@ const Hero = () => {
     <section className="max-w-7xl mx-auto bg-base-100 flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-20 px-8 py-8 lg:py-20">
       <div className="flex flex-col gap-10 lg:gap-14 items-center justify-center text-center">
         <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4">
-          Sync and Search your Twitter Likes
+          Sync and Search your Twitter likes & bookmarks
         </h1>
         <p className="text-lg opacity-80 leading-relaxed">
-          xlike is a chrome extension that allows you to sync and search your
-          twitter(x) likes.
+          xlike is a chrome extension allows you to sync and search your
+          twitter(x) likes & bookmarks.
         </p>
         <a
           className="btn btn-wide"
@@ -45,10 +45,10 @@ const Hero = () => {
               d="M128.003 64.004H238.84a127.973 127.973 0 0 0-221.685.015l55.419 95.99l.015.008a63.993 63.993 0 0 1 55.415-96.014z"
             />
           </svg>
-          Chrome download
+          Get Xlike for Chrome
         </a>
 
-        <TestimonialsAvatars priority={true} />
+        {/* <TestimonialsAvatars priority={true} /> */}
       </div>
     </section>
   );

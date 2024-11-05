@@ -13,15 +13,7 @@ interface FAQItemProps {
 
 const faqList: FAQItemProps[] = [
   {
-    question: "Is it free?",
-    answer: (
-      <div className="space-y-2 leading-relaxed">
-        All The basic functions are free, including sync and search.
-      </div>
-    ),
-  },
-  {
-    question: "Where is my like data stored?",
+    question: "Where is my likes & bookmarks data stored?",
     answer: (
       <p>
         It's stored in your browser, a database called indexdb. We will not
