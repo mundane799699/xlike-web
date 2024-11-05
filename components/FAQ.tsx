@@ -32,7 +32,7 @@ const faqList: FAQItemProps[] = [
     ),
   },
   {
-    question: "What&apos;s the difference between paid and free version?",
+    question: `What's the difference between paid and free version?`,
     answer: (
       <p>
         The paid version allows you to upload your data to our servers, so you
