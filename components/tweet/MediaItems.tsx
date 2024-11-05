@@ -4,7 +4,7 @@ const MediaItems = ({ media_items }: { media_items: MediaItem[] }) => {
   return (
     <>
       {media_items?.map((item) => (
-        <Cover media_item={item} />
+        <Cover key={item.media_url_https} media_item={item} />
       ))}
     </>
   );
