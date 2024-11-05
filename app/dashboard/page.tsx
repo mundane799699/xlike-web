@@ -4,7 +4,7 @@ import ButtonAccount from "@/components/ButtonAccount";
 import { useAuth } from "@/hooks/use-auth";
 import apiClient from "@/libs/api";
 import { ChevronDownIcon, Loader2, Search, X } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { createClient } from "@/libs/supabase/client";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -69,21 +69,13 @@ export default function Dashboard() {
   const hasMore = useRef(true);
   const authors = useRef([]);
   const [inputValue, setInputValue] = useState("");
-  const filteredAuthors = useMemo(
-    () =>
-      inputValue
-        ? authors.current.filter(
-            (author) =>
-              author.username
-                .toLowerCase()
-                .includes(inputValue.toLowerCase()) ||
-              author.screen_name
-                .toLowerCase()
-                .includes(inputValue.toLowerCase())
-          )
-        : authors.current,
-    [inputValue, authors.current]
-  );
+  const filteredAuthors = inputValue
+    ? authors.current.filter(
+        (author) =>
+          author.username.toLowerCase().includes(inputValue.toLowerCase()) ||
+          author.screen_name.toLowerCase().includes(inputValue.toLowerCase())
+      )
+    : authors.current;
   const [selectedAuthor, setSelectedAuthor] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
