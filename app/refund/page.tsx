@@ -85,6 +85,9 @@ Please note, we cannot provide refunds for:
 6. Contact Us
 If you have any questions about our Refund Policy, please contact Xlike Software Tech at zfyoung799699@gmail.com`}
         </pre>
+        <p className="mt-10 text-sm text-base-content text-end">
+          Xlike Software Tech
+        </p>
       </div>
     </main>
   );

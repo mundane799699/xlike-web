@@ -26,15 +26,12 @@ const Footer = () => {
                 height={24}
               />
               <strong className="font-extrabold tracking-tight text-base md:text-lg">
-                {config.appName}
+                Xlike Software Tech
               </strong>
             </Link>
 
             <p className="mt-3 text-sm text-base-content/80">
               {config.appDescription}
-            </p>
-            <p className="mt-3 text-sm text-base-content/60">
-              Copyright © {new Date().getFullYear()} - All rights reserved
             </p>
           </div>
           <div className="flex-grow flex flex-wrap justify-center -mb-10 md:mt-0 mt-10 text-center">
@@ -79,6 +76,12 @@ const Footer = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="text-center mt-32">
+          <p className="text-sm text-basetext">
+            Copyright © {new Date().getFullYear()} Xlike Software Tech. All
+            rights reserved.
+          </p>
         </div>
       </div>
     </footer>

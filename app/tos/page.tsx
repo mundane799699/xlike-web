@@ -101,6 +101,9 @@ For any questions or concerns regarding these Terms of Service, please contact X
 
 Thank you for using Xlike!`}
         </pre>
+        <p className="mt-10 text-sm text-base-content text-end">
+          Xlike Software Tech
+        </p>
       </div>
     </main>
   );

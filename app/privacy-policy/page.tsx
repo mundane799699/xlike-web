@@ -123,6 +123,9 @@ Email: zfyoung799699@gmail.com
 
 By using Xlike, you consent to the terms of this Privacy Policy.`}
         </pre>
+        <p className="mt-10 text-sm text-base-content text-end">
+          Xlike Software Tech
+        </p>
       </div>
     </main>
   );
