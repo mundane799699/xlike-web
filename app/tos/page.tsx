@@ -63,7 +63,7 @@ const TOS = () => {
 
 Welcome to Xlike!
 
-These Terms of Service ("Terms") govern your use of the Xlike browser extension ("Extension") and any associated services provided by Xlike. By using our Extension and services, you agree to these Terms.
+These Terms of Service ("Terms") govern your use of the Xlike browser extension ("Extension") and any associated services provided by Xlike Software Tech. By using our Extension and services, you agree to these Terms.
 
 1. Description of Xlike
 
@@ -97,7 +97,7 @@ These Terms are governed by the laws of US.
 
 We may update these Terms from time to time. Users will be notified of any significant changes via the extension or our website.
 
-For any questions or concerns regarding these Terms of Service, please contact us at zfyoung799699@gmail.com.
+For any questions or concerns regarding these Terms of Service, please contact Xlike Software Tech at zfyoung799699@gmail.com.
 
 Thank you for using Xlike!`}
         </pre>

@@ -61,7 +61,7 @@ const PrivacyPolicy = () => {
         >
           {`Last Updated: September 24, 2024
 
-Thank you for using Xlike ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our browser extension Xlike (the "Extension").
+Thank you for using Xlike ("we," "us," or "our"), a product of Xlike Software Tech. This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our browser extension Xlike (the "Extension").
 
 By installing or using the Extension, you agree to the terms of this Privacy Policy. If you do not agree with the practices described in this policy, please do not use the Extension.
 
@@ -117,7 +117,7 @@ You have the right to access, correct, or delete your personal information and T
 
 9. Contact Information
 
-If you have any questions, concerns, or requests related to this Privacy Policy, you can contact us at:
+If you have any questions, concerns, or requests related to this Privacy Policy, you can contact Xlike Software Tech at:
 
 Email: zfyoung799699@gmail.com
 

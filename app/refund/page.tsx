@@ -63,7 +63,7 @@ const RefundPolicy = () => {
           {`Last Updated: September 24, 2024
 
 1. Introduction
-At ${config.appName}, we strive to ensure our customers are satisfied with their purchases. If you are not entirely satisfied with your purchase, we're here to help.
+At ${config.appName}, operated by Xlike Software Tech, we strive to ensure our customers are satisfied with their purchases. If you are not entirely satisfied with your purchase, we're here to help.
 
 2. Refund Eligibility
 To be eligible for a refund, you must request it within 7 days of your purchase.
@@ -83,7 +83,7 @@ Please note, we cannot provide refunds for:
 - Customized or personalized services
 
 6. Contact Us
-If you have any questions about our Refund Policy, please contact us at zfyoung799699@gmail.com`}
+If you have any questions about our Refund Policy, please contact Xlike Software Tech at zfyoung799699@gmail.com`}
         </pre>
       </div>
     </main>
