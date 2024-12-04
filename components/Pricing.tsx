@@ -91,6 +91,11 @@ const Pricing = () => {
 
                   <span>Get access for 1 month</span>
                 </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
+
+                  <span>This plan requires manual renewal after 1 month.</span>
+                </li>
               </ul>
               <div className="space-y-2">
                 <ButtonCheckout priceId={"1"} />
@@ -139,6 +144,11 @@ const Pricing = () => {
 
                   <span>Get access for 3 months</span>
                 </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
+
+                  <span>This plan requires manual renewal after 3 months.</span>
+                </li>
               </ul>
               <div className="space-y-2">
                 <ButtonCheckout priceId={"1"} />
@@ -186,6 +196,13 @@ const Pricing = () => {
                   <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
 
                   <span>Get access for 12 months</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
+
+                  <span>
+                    This plan requires manual renewal after 12 months.
+                  </span>
                 </li>
               </ul>
               <div className="space-y-2">
