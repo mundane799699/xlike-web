@@ -94,7 +94,7 @@ const Pricing = () => {
                 <li className="flex items-center gap-2">
                   <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
 
-                  <span>This plan requires manual renewal after 1 month.</span>
+                  <span>This plan requires manual renewal after 1 month</span>
                 </li>
               </ul>
               <div className="space-y-2">
@@ -147,7 +147,7 @@ const Pricing = () => {
                 <li className="flex items-center gap-2">
                   <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
 
-                  <span>This plan requires manual renewal after 3 months.</span>
+                  <span>This plan requires manual renewal after 3 months</span>
                 </li>
               </ul>
               <div className="space-y-2">
@@ -200,9 +200,7 @@ const Pricing = () => {
                 <li className="flex items-center gap-2">
                   <Check className="w-[18px] h-[18px] opacity-80 shrink-0" />
 
-                  <span>
-                    This plan requires manual renewal after 12 months.
-                  </span>
+                  <span>This plan requires manual renewal after 12 months</span>
                 </li>
               </ul>
               <div className="space-y-2">
